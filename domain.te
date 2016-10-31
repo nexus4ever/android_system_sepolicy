@@ -255,10 +255,6 @@ neverallow { domain -su } init:process ptrace;
 # triggered, it's probably due to a service with no SELinux domain.
 neverallow { domain -su } init:binder *;
 
-# Don't allow raw read/write/open access to block_device
-# Rather force a relabel to a more specific type
-neverallow { domain -kernel -init -recovery -uncrypt -su } block_device:blk_file { open read write };
-
 # Don't allow raw read/write/open access to generic devices.
 # Rather force a relabel to a more specific type.
 # init is exempt from this as there are character devices that only it uses.
