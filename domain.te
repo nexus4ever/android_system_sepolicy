@@ -318,9 +318,6 @@ neverallow { domain -recovery -kernel } { system_file exec_type }:dir_file_class
 neverallow * exec_type:dir_file_class_set mounton;
 neverallow { domain -init } system_file:dir_file_class_set mounton;
 
-# Nothing should be writing to files in the rootfs.
-neverallow * rootfs:file { create write setattr relabelto append unlink link rename };
-
 # Restrict context mounts to specific types marked with
 # the contextmount_type attribute.
 neverallow * {fs_type -contextmount_type}:filesystem relabelto;
@@ -417,11 +414,6 @@ neverallow * *:{ shm sem msg msgq } *;
 # Do not mount on top of symlinks, fifos, or sockets.
 # Feature parity with Chromium LSM.
 neverallow * { file_type fs_type dev_type }:{ lnk_file fifo_file sock_file } mounton;
-
-# Nobody should be able to execute su on user builds.
-# On userdebug/eng builds, only dumpstate, shell, and
-# su itself execute su.
-neverallow { domain userdebug_or_eng(`-dumpstate -shell -su') } su_exec:file no_x_file_perms;
 
 # Do not allow the introduction of new execmod rules. Text relocations
 # and modification of executable pages are unsafe.
